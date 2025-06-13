@@ -3,22 +3,28 @@
 
 using namespace std;
 
-void imprimir_matriz(char tablero[LADO][LADO])
+void imprimirMatriz(char tablero[LADO][LADO])
 {
-	cout << "  1 2 3 4 5 6 7 8" << endl;
+	//Aqui tenemos la cabecera de las columnas  con margenes
+	cout << "  ";
+	for (int col = 1; col <= LADO; ++col) {
+		cout << col << ' ';
+	}
+	cout << endl;
 
-	for (int i = 0; i < LADO; i++)
-	{
-		cout << LADO - i << ' ';
-		for (int j = 0; j < LADO; j++)
-		{
-			cout << tablero[i][j] << ' ';
+	// 2) Cada fila, numerada de LADO a 1
+	for (int fila = 0; fila < LADO; ++fila) {
+		// número de fila (8,7,…,1)
+		cout << (LADO - fila) << ' ';
+		// contenido de la fila
+		for (int col = 0; col < LADO; ++col) {
+			cout << tablero[fila][col] << ' ';
 		}
 		cout << endl;
 	}
 }
 
-void elige_pieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPiezaElegida)
+void elegirPieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPiezaElegida)
 {
 	bool posicionValida = false;
 	do {
@@ -28,7 +34,7 @@ void elige_pieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPieza
 		do
 		{
 			system("cls");
-			imprimir_matriz(tablero);
+			imprimirMatriz(tablero);
 			cout << endl << endl;
 			cout << "Elige una pieza (introduce su posicion)" << endl;
 			cout << " Introduce la fila: " << flush;
@@ -38,7 +44,7 @@ void elige_pieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPieza
 		do
 		{
 			system("cls");
-			imprimir_matriz(tablero);
+			imprimirMatriz(tablero);
 			cout << endl << endl;
 			cout << "Elige una pieza (introduce su posicion)" << endl;
 			cout << " Introduce la fila: " << inputFila;
@@ -66,9 +72,6 @@ void elige_pieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPieza
 			default: break;
 			}
 
-			/*if (tablero[inputFila][inputColumna] == 'T')
-			if (tablero[inputFila][inputColumna] == 'H')
-			if (tablero[inputFila][inputColumna] == 'Q')*/
 		}
 		else
 		{
@@ -93,38 +96,38 @@ void elige_pieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPieza
 
 }
 
-bool gestionar_movimiento_valido(char tablero[LADO][LADO], bool turnoBlancas, bool enroques[], bool puedeEnrocar[], Posicion posOrigen, Posicion& posDestino)
+bool gestionarMovimientoValido(char tablero[LADO][LADO], bool turnoBlancas, bool enroques[], bool puedeEnrocar[], Posicion posOrigen, Posicion& posDestino)
 {
 	switch (tablero[posOrigen.fila][posOrigen.columna])
 	{
 	case 'T':
 	case 't':
-		return movimiento_torre(tablero, turnoBlancas, posOrigen, posDestino);
+		return movimientoTorre(tablero, turnoBlancas, posOrigen, posDestino);
 		break;
 
 	case 'P':
 	case 'p':
-		return movimiento_peon(tablero, turnoBlancas, posOrigen, posDestino);
+		return movimientoPeon(tablero, turnoBlancas, posOrigen, posDestino);
 		break;
 
 	case 'H':
 	case 'h':
-		return movimiento_caballo(tablero, turnoBlancas, posOrigen, posDestino);
+		return movimientoCaballo(tablero, turnoBlancas, posOrigen, posDestino);
 		break;
 
 	case 'B':
 	case 'b':
-		return movimiento_alfil(tablero, turnoBlancas, posOrigen, posDestino);
+		return movimientoAlfil(tablero, turnoBlancas, posOrigen, posDestino);
 		break;
 
 	case 'Q':
 	case 'q':
-		return movimiento_reina(tablero, turnoBlancas, posOrigen, posDestino);
+		return movimientoReina(tablero, turnoBlancas, posOrigen, posDestino);
 		break;
 
 	case 'K':
 	case 'k':
-		return movimiento_rey(tablero, turnoBlancas, posOrigen, posDestino, enroques, puedeEnrocar);
+		return movimientoRey(tablero, turnoBlancas, posOrigen, posDestino, enroques, puedeEnrocar);
 		break;
 
 	default: 
@@ -133,7 +136,7 @@ bool gestionar_movimiento_valido(char tablero[LADO][LADO], bool turnoBlancas, bo
 	}
 }
 
-void gestionar_enroque(char tablero[LADO][LADO], bool turnoBlancas, Posicion posDestinoRey, Posicion posDestinoTorre)
+void gestionarEnroque(char tablero[LADO][LADO], bool turnoBlancas, Posicion posDestinoRey, Posicion posDestinoTorre)
 {
 	if (turnoBlancas)
 	{
@@ -147,7 +150,7 @@ void gestionar_enroque(char tablero[LADO][LADO], bool turnoBlancas, Posicion pos
 	}
 }
 
-void gestionar_promotion(char tablero[LADO][LADO], bool turnoBlancas, Posicion posDestino)
+void gestionarPromocion(char tablero[LADO][LADO], bool turnoBlancas, Posicion posDestino)
 {
 	if (turnoBlancas)
 	{
@@ -159,7 +162,7 @@ void gestionar_promotion(char tablero[LADO][LADO], bool turnoBlancas, Posicion p
 	}
 }
 
-bool movimiento_peon(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
+bool movimientoPeon(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
 {
 	if (turnoBlancas)
 	{
@@ -171,22 +174,22 @@ bool movimiento_peon(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOr
 		case 'q':
 		case 'k':
 		case 'p':
-			if (((posOrigen.columna + 1 == posDestino.columna) ||	// derecha
-				(posOrigen.columna - 1 == posDestino.columna)) &&	//izquierda
-				(posOrigen.fila - 1 == posDestino.fila))			//casilla siguiente hacia arriba
+			if (((posOrigen.columna + 1 == posDestino.columna) ||	
+				(posOrigen.columna - 1 == posDestino.columna)) &&	
+				(posOrigen.fila - 1 == posDestino.fila))
 			{
 				if (posDestino.fila == 0)
-					gestionar_promotion(tablero, turnoBlancas, posDestino);
+					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
 			break;
 
 		case '*':
-			if ((posOrigen.fila - 1 == posDestino.fila) &&			//peon se mueve hacia arriba
+			if ((posOrigen.fila - 1 == posDestino.fila) &&
 				(posOrigen.columna == posDestino.columna))
 			{
 				if (posDestino.fila == 0)
-					gestionar_promotion(tablero, turnoBlancas, posDestino);
+					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
 			break;
@@ -206,22 +209,22 @@ bool movimiento_peon(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOr
 		case 'K':
 		case 'P':
 			//juegan las negras
-			if (((posOrigen.columna + 1 == posDestino.columna) ||	// derecha
-				(posOrigen.columna - 1 == posDestino.columna)) &&	//izquierda
-				(posOrigen.fila + 1 == posDestino.fila))			//casilla siguiente hacia abajo
+			if (((posOrigen.columna + 1 == posDestino.columna) ||
+				(posOrigen.columna - 1 == posDestino.columna)) &&
+				(posOrigen.fila + 1 == posDestino.fila))
 			{
 				if (posDestino.fila == LADO-1)
-					gestionar_promotion(tablero, turnoBlancas, posDestino);
+					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
 			break;
 
 		case '*':
-			if ((posOrigen.fila + 1 == posDestino.fila) &&			//peon se mueve hacia abajo
+			if ((posOrigen.fila + 1 == posDestino.fila) &&	
 				(posOrigen.columna == posDestino.columna))
 			{
 				if (posDestino.fila == LADO-1)
-					gestionar_promotion(tablero, turnoBlancas, posDestino);
+					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
 			break;
@@ -233,7 +236,7 @@ bool movimiento_peon(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOr
 	return false;
 }
 
-bool movimiento_torre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
+bool movimientoTorre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
 {
 	if (turnoBlancas)
 	{
@@ -247,7 +250,7 @@ bool movimiento_torre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 		case 'p':
 		case '*':
 
-			if (posDestino.fila != posOrigen.fila)	//movimiento vertical
+			if (posDestino.fila != posOrigen.fila)
 			{
 				int dif_filas = posDestino.fila - posOrigen.fila;
 				for (int offset = dif_filas > 0 ? dif_filas-1 : dif_filas+1; 
@@ -257,19 +260,18 @@ bool movimiento_torre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 						return false;
 				}
 			}
-			else									//movimiento horizontal
+			else						
 			{
 				int dif_columnas = posDestino.columna - posOrigen.columna;
 				for (int offset = dif_columnas > 0 ? dif_columnas-1 : dif_columnas+1; 
 					offset != 0; offset = offset > 0 ? offset - 1 : offset + 1)
 				{
-					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')	//saltando por encima de otra pieza
+					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')
 						return false;
 				}
 			}
 			
-			// todas las posiciones que lleguen a estas funciones siempre estan dentro del tablero
-			// (se comprueba en elige_pieza() y elige_movimiento())
+
 
 			return
 				((posOrigen.columna != posDestino.columna) &&
@@ -294,7 +296,7 @@ bool movimiento_torre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 		case 'P':
 		case '*':
 
-			if (posDestino.fila != posOrigen.fila)	//movimiento vertical
+			if (posDestino.fila != posOrigen.fila)
 			{
 				int dif_filas = posDestino.fila - posOrigen.fila;
 				for (int offset = dif_filas > 0 ? dif_filas - 1 : dif_filas + 1;
@@ -304,13 +306,13 @@ bool movimiento_torre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 						return false;
 				}
 			}
-			else									//movimiento horizontal
+			else									
 			{
 				int dif_columnas = posDestino.columna - posOrigen.columna;
 				for (int offset = dif_columnas > 0 ? dif_columnas - 1 : dif_columnas + 1;
 					offset != 0; offset = offset > 0 ? offset - 1 : offset + 1)
 				{
-					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')	//saltando por encima de otra pieza
+					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')
 						return false;
 				}
 			}
@@ -329,7 +331,7 @@ bool movimiento_torre(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 	return false;
 }
 
-bool movimiento_caballo(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
+bool movimientoCaballo(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
 {
 	if (turnoBlancas)
 	{
@@ -343,41 +345,36 @@ bool movimiento_caballo(char tablero[LADO][LADO], bool turnoBlancas, Posicion po
 		case 'p':
 		case '*':
 
-			//el caballo puede saltar otras piezas, no hacen falta otras comprobaciones
 
 			return
-				((posOrigen.columna + 1 == posDestino.columna) &&	//	 # D
-				(posOrigen.fila - 2 == posDestino.fila)) ||			//	 #
-																	//	 O
+				((posOrigen.columna + 1 == posDestino.columna) &&
+				(posOrigen.fila - 2 == posDestino.fila)) ||			
+																	
 				
-				((posOrigen.columna - 1 == posDestino.columna) &&	// D #
-				(posOrigen.fila - 2 == posDestino.fila)) ||			//   #
-																	//	 O
+				((posOrigen.columna - 1 == posDestino.columna) &&
+				(posOrigen.fila - 2 == posDestino.fila)) ||			
+																	
 			
-				((posOrigen.columna - 1 == posDestino.columna) &&	//   O
-				(posOrigen.fila + 2 == posDestino.fila)) ||			//   #
-																	// D #
+				((posOrigen.columna - 1 == posDestino.columna) &&	
+				(posOrigen.fila + 2 == posDestino.fila)) ||			
 				
-				((posOrigen.columna + 1 == posDestino.columna) &&	//   O
-				(posOrigen.fila + 2 == posDestino.fila)) ||			//   #
-																	//   # D
-				
-				((posOrigen.columna + 2 == posDestino.columna) &&	//     D
-				(posOrigen.fila - 1 == posDestino.fila)) ||			// O # #
-																	// 
+				((posOrigen.columna + 1 == posDestino.columna) &&	
+				(posOrigen.fila + 2 == posDestino.fila)) ||			
+								
+			
+				((posOrigen.columna + 2 == posDestino.columna) &&	
+				(posOrigen.fila - 1 == posDestino.fila)) ||			
+																	
 
-				((posOrigen.columna + 2 == posDestino.columna) &&	//     
-				(posOrigen.fila + 1 == posDestino.fila)) ||			// O # #
-																	//     D
+				((posOrigen.columna + 2 == posDestino.columna) &&   
+				(posOrigen.fila + 1 == posDestino.fila)) ||			
 
-				((posOrigen.columna - 2 == posDestino.columna) &&	// D  
-				(posOrigen.fila - 1 == posDestino.fila)) ||			// # # O
-																	//
+				((posOrigen.columna - 2 == posDestino.columna) &&
+				(posOrigen.fila - 1 == posDestino.fila)) ||			
 				 
-				((posOrigen.columna - 2 == posDestino.columna) &&	//     
-				(posOrigen.fila + 1 == posDestino.fila)); 			// # # O
-																	// D   
-				
+				((posOrigen.columna - 2 == posDestino.columna) &&	   
+				(posOrigen.fila + 1 == posDestino.fila)); 			
+
 			break;
 
 		default:
@@ -397,37 +394,34 @@ bool movimiento_caballo(char tablero[LADO][LADO], bool turnoBlancas, Posicion po
 		case '*':
 
 			return
-				((posOrigen.columna + 1 == posDestino.columna) &&	//	 # D
-				(posOrigen.fila - 2 == posDestino.fila)) ||			//	 #
-																	//	 O
+				((posOrigen.columna + 1 == posDestino.columna) &&	
+				(posOrigen.fila - 2 == posDestino.fila)) ||			
 
-				((posOrigen.columna - 1 == posDestino.columna) &&	// D #
-				(posOrigen.fila - 2 == posDestino.fila)) ||			//   #
-																	//	 O
+				((posOrigen.columna - 1 == posDestino.columna) &&	
+				(posOrigen.fila - 2 == posDestino.fila)) ||			
 
-				((posOrigen.columna - 1 == posDestino.columna) &&	//   O
-				(posOrigen.fila + 2 == posDestino.fila)) ||			//   #
-																	// D #
+				((posOrigen.columna - 1 == posDestino.columna) &&	
+				(posOrigen.fila + 2 == posDestino.fila)) ||			
 
-				((posOrigen.columna + 1 == posDestino.columna) &&	//   O
-				(posOrigen.fila + 2 == posDestino.fila)) ||			//   #
-																	//   # D
+				((posOrigen.columna + 1 == posDestino.columna) &&	
+				(posOrigen.fila + 2 == posDestino.fila)) ||			
+																	
 
-				((posOrigen.columna + 2 == posDestino.columna) &&	//     D
-				(posOrigen.fila - 1 == posDestino.fila)) ||			// O # #
-																	// 
+				((posOrigen.columna + 2 == posDestino.columna) &&
+				(posOrigen.fila - 1 == posDestino.fila)) ||			
+																	
 				
-				((posOrigen.columna + 2 == posDestino.columna) &&	//     
-				(posOrigen.fila + 1 == posDestino.fila)) ||			// O # #
-																	//     D
+				((posOrigen.columna + 2 == posDestino.columna) &&
+				(posOrigen.fila + 1 == posDestino.fila)) ||			
+																	
 
-				((posOrigen.columna - 2 == posDestino.columna) &&	// D  
-				(posOrigen.fila - 1 == posDestino.fila)) ||			// # # O
-																	//
+				((posOrigen.columna - 2 == posDestino.columna) &&	
+				(posOrigen.fila - 1 == posDestino.fila)) ||			
+																	
 
-				((posOrigen.columna - 2 == posDestino.columna) &&	//     
-				(posOrigen.fila + 1 == posDestino.fila)); 			// # # O
-																	// D 
+				((posOrigen.columna - 2 == posDestino.columna) &&	  
+				(posOrigen.fila + 1 == posDestino.fila)); 			
+																	
 			break;
 
 		default:
@@ -437,7 +431,7 @@ bool movimiento_caballo(char tablero[LADO][LADO], bool turnoBlancas, Posicion po
 	return false;
 }
 
-bool movimiento_alfil(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
+bool movimientoAlfil(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
 {
 	if (turnoBlancas)
 	{
@@ -453,7 +447,7 @@ bool movimiento_alfil(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 			int dif_filas = posDestino.fila - posOrigen.fila;
 			int dif_columnas = posDestino.columna - posOrigen.columna;
 
-			if (abs(dif_filas) != abs(dif_columnas))	//si son distintos, el movimiento no es diagonal
+			if (abs(dif_filas) != abs(dif_columnas))	
 				return false;
 			
 			int offset_filas = dif_filas > 0 ? dif_filas - 1 : dif_filas + 1;
@@ -490,7 +484,7 @@ bool movimiento_alfil(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 			int dif_filas = posDestino.fila - posOrigen.fila;
 			int dif_columnas = posDestino.columna - posOrigen.columna;
 
-			if (abs(dif_filas) != abs(dif_columnas))	//si son distintos, el movimiento no es diagonal
+			if (abs(dif_filas) != abs(dif_columnas))	
 				return false;
 			
 			int offset_filas = dif_filas > 0 ? dif_filas - 1 : dif_filas + 1;
@@ -517,7 +511,7 @@ bool movimiento_alfil(char tablero[LADO][LADO], bool turnoBlancas, Posicion posO
 	return false;
 }
 
-bool movimiento_rey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion& posDestino, bool enrocado[], bool puedeEnrocar[])
+bool movimientoRey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion& posDestino, bool enrocado[], bool puedeEnrocar[])
 {
 	if (turnoBlancas)
 	{
@@ -530,31 +524,31 @@ bool movimiento_rey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOri
 				for (int offset = dif_columnas > 0 ? dif_columnas - 1 : dif_columnas + 1;
 					offset != 0; offset = offset > 0 ? offset - 1 : offset + 1)
 				{
-					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')	//saltando por encima de otra pieza
+					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')	
 						return false;
 				}
 
-				if (posDestino.columna < posOrigen.columna) //enroque largo
+				if (posDestino.columna < posOrigen.columna) 
 				{
 					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna - 2 };
 					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna + 1 };
 				
 					enrocado[0] = true;
 					puedeEnrocar[0] = false;
-					gestionar_enroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
+					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
 					tablero[posDestino.fila][posDestino.columna] = '*';
 					posDestino.fila = reyEnrocado.fila;
 					posDestino.columna = reyEnrocado.columna;
 					return true;
 				}
-				else //enroque corto
+				else 
 				{
 					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna + 2 };
 					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna - 1 };
 
 					enrocado[0] = true;
 					puedeEnrocar[0] = false;
-					gestionar_enroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
+					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
 					tablero[posDestino.fila][posDestino.columna] = '*';
 					posDestino.fila = reyEnrocado.fila;
 					posDestino.columna = reyEnrocado.columna;
@@ -573,13 +567,13 @@ bool movimiento_rey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOri
 			puedeEnrocar[0] = false;			
 
 			return
-				((posOrigen.fila - 1 == posDestino.fila) &&			//Arriba
+				((posOrigen.fila - 1 == posDestino.fila) &&			
 				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				//Izquierda
+				((posOrigen.fila == posDestino.fila) &&				
 				(posOrigen.columna + 1 == posDestino.columna)) ||
-				((posOrigen.fila + 1 == posDestino.fila) &&			//Abajo
+				((posOrigen.fila + 1 == posDestino.fila) &&			
 				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				//Derecha
+				((posOrigen.fila == posDestino.fila) &&				
 				(posOrigen.columna - 1 == posDestino.columna));
 			break;
 
@@ -594,27 +588,27 @@ bool movimiento_rey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOri
 		case 't':
 			if (!enrocado[1] && puedeEnrocar[1])
 			{
-				if (posDestino.columna < posOrigen.columna) //enroque largo
+				if (posDestino.columna < posOrigen.columna) 
 				{
 					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna - 2 };
 					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna + 1 };
 
 					enrocado[1] = true;
 					puedeEnrocar[1] = false;
-					gestionar_enroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
+					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
 					tablero[posDestino.fila][posDestino.columna] = '*';
 					posDestino.fila = reyEnrocado.fila;
 					posDestino.columna = reyEnrocado.columna;
 					return true;
 				}
-				else //enroque corto
+				else 
 				{
 					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna + 2 };
 					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna - 1 };
 
 					enrocado[1] = true;
 					puedeEnrocar[1] = false;
-					gestionar_enroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
+					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
 					tablero[posDestino.fila][posDestino.columna] = '*';
 					posDestino.fila = reyEnrocado.fila;
 					posDestino.columna = reyEnrocado.columna;
@@ -632,13 +626,13 @@ bool movimiento_rey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOri
 			puedeEnrocar[1] = false;
 
 			return
-				((posOrigen.fila - 1 == posDestino.fila) &&			//Arriba
+				((posOrigen.fila - 1 == posDestino.fila) &&			
 				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				//Izquierda
+				((posOrigen.fila == posDestino.fila) &&				
 				(posOrigen.columna - 1 == posDestino.columna)) ||
-				((posOrigen.fila + 1 == posDestino.fila) &&			//Abajo
+				((posOrigen.fila + 1 == posDestino.fila) &&			
 				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				//Derecha
+				((posOrigen.fila == posDestino.fila) &&			
 				(posOrigen.columna - 1 == posDestino.columna));
 			break;
 
@@ -649,14 +643,14 @@ bool movimiento_rey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOri
 	return false;
 }
 
-bool movimiento_reina(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
+bool movimientoReina(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion posDestino)
 {
 	return
-		movimiento_alfil(tablero, turnoBlancas, posOrigen, posDestino) ||
-		movimiento_torre(tablero, turnoBlancas, posOrigen, posDestino);
+		movimientoAlfil(tablero, turnoBlancas, posOrigen, posDestino) ||
+		movimientoTorre(tablero, turnoBlancas, posOrigen, posDestino);
 }
 
-void elige_movimiento(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posDestinoElegida)
+void elegirMovimiento(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posDestinoElegida)
 {
 	int inputFilaDestino;
 	int inputColumnaDestino;
@@ -667,7 +661,7 @@ void elige_movimiento(char tablero[LADO][LADO], bool turnoBlancas, Posicion* pos
 		do
 		{
 			system("cls");
-			imprimir_matriz(tablero);
+			imprimirMatriz(tablero);
 			cout << endl << endl;
 			cout << "Elige una posicion destino" << endl;
 			cout << " Introduce la fila: " << flush;
@@ -677,7 +671,7 @@ void elige_movimiento(char tablero[LADO][LADO], bool turnoBlancas, Posicion* pos
 		do
 		{
 			system("cls");
-			imprimir_matriz(tablero);
+			imprimirMatriz(tablero);
 			cout << endl << endl;
 			cout << "Elige una posicion destino" << endl;
 			cout << " Introduce la fila: " << inputFilaDestino;
@@ -687,7 +681,7 @@ void elige_movimiento(char tablero[LADO][LADO], bool turnoBlancas, Posicion* pos
 			cout << endl;
 		} while (inputColumnaDestino <= 0 || inputColumnaDestino > 8);
 
-		if (!turnoBlancas)	//las negras solo pueden atacar blancas o usar una casilla vacia
+		if (!turnoBlancas)	
 		{
 			switch (tablero[LADO - inputFilaDestino][inputColumnaDestino - 1])
 			{
@@ -730,14 +724,14 @@ void elige_movimiento(char tablero[LADO][LADO], bool turnoBlancas, Posicion* pos
 	} while (!posicionValida);
 }
 
-void sustituir_casilla(char tablero[LADO][LADO], Posicion posOrigen, Posicion posDestino)
+void sustituirCasilla(char tablero[LADO][LADO], Posicion posOrigen, Posicion posDestino)
 {
 	char pieza = tablero[posOrigen.fila][posOrigen.columna];
 	tablero[posOrigen.fila][posOrigen.columna] = '*';
 	tablero[posDestino.fila][posDestino.columna] = pieza;
 }
 
-bool juego_acabado(char tablero[LADO][LADO])
+bool juegoAcabado(char tablero[LADO][LADO])
 {
 	bool reyBlancas = false;
 	bool reyNegras = false;

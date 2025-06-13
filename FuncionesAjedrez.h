@@ -7,7 +7,7 @@ struct Posicion {
     int columna;
 };
 
-//Se imprime el tablero
+//Sirve para la impresión del tablero
 void imprimirMatriz(char tablero[LADO][LADO]);
 
 //Se declaran las funciones para mover las pieaas

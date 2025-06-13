@@ -33,28 +33,21 @@ int main() {
 
         Posicion posicionPieza;
 
-        // Elegir pieza a mover
-        elegirPieza(tablero, turnoBlancas, &posicionPieza);
+         elegirPieza(tablero, turnoBlancas, &posicionPieza);
 
         Posicion posicionDestino;
 
         do {
-            // Elegir destino a mover
             elegirMovimiento(tablero, turnoBlancas, &posicionDestino);
 
-            // Gestionar si el movimiento es válido
         } while (!gestionarMovimientoValido(tablero, turnoBlancas, enroquesRealizados, puedeEnrocar, posicionPieza, posicionDestino));
 
-        // Sustituir la casilla (mover pieza)
         sustituirCasilla(tablero, posicionPieza, posicionDestino);
 
-        // Comprobar si el juego ha terminado
         juegoTerminado = juegoTerminado || juegoAcabado(tablero);
 
-        // Cambiar de turno
         turnoBlancas = !turnoBlancas;
 
-        // Mostrar el tablero actualizado
         system("cls");
         imprimirMatriz(tablero);
 
