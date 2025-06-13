@@ -3,6 +3,8 @@
 
 using namespace std;
 
+TESTEO
+
 void imprimirMatriz(char tablero[LADO][LADO])
 {
 	//Aqui tenemos la cabecera de las columnas  con margenes
