@@ -165,71 +165,69 @@ bool movimientoPeon(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOri
 {
 	if (turnoBlancas)
 	{
-		switch (tablero[posDestino.fila][posDestino.columna])
-		{
-		case 't':
-		case 'h':
-		case 'b':
-		case 'q':
-		case 'k':
-		case 'p':
-			if (((posOrigen.columna + 1 == posDestino.columna) ||	
-				(posOrigen.columna - 1 == posDestino.columna)) &&	
-				(posOrigen.fila - 1 == posDestino.fila))
+		char destino = tablero[posDestino.fila][posDestino.columna];
+		if (destino == '*') {
+			if (posOrigen.fila - 1 == posDestino.fila && posOrigen.columna == posDestino.columna)
 			{
 				if (posDestino.fila == 0)
 					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
-			break;
-
-		case '*':
-			if ((posOrigen.fila - 1 == posDestino.fila) &&
-				(posOrigen.columna == posDestino.columna))
+			if (posOrigen.fila == 6 &&
+				posDestino.fila == 4 &&
+				tablero[5][posOrigen.columna] == '*')
 			{
-				if (posDestino.fila == 0)
-					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
-			break;
-
-		default:
-			break;
+		}
+		else {
+			switch (destino)
+			{
+			case 't': case 'h': case 'b': case 'q': case 'k': case 'p':
+				if ((posOrigen.columna + 1 == posDestino.columna ||
+					posOrigen.columna - 1 == posDestino.columna) &&
+					posOrigen.fila - 1 == posDestino.fila)
+				{
+					if (posDestino.fila == 0)
+						gestionarPromocion(tablero, turnoBlancas, posDestino);
+					return true;
+				}
+				break;
+			}
 		}
 	}
-
-	else {
-		switch (tablero[posDestino.fila][posDestino.columna])
-		{
-		case 'T':
-		case 'H':
-		case 'B':
-		case 'Q':
-		case 'K':
-		case 'P':
-			//juegan las negras
-			if (((posOrigen.columna + 1 == posDestino.columna) ||
-				(posOrigen.columna - 1 == posDestino.columna)) &&
-				(posOrigen.fila + 1 == posDestino.fila))
+	else
+	{
+		char destino = tablero[posDestino.fila][posDestino.columna];
+		if (destino == '*') {
+			if (posOrigen.fila + 1 == posDestino.fila &&
+				posOrigen.columna == posDestino.columna)
 			{
-				if (posDestino.fila == LADO-1)
+				if (posDestino.fila == LADO - 1)
 					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
-			break;
-
-		case '*':
-			if ((posOrigen.fila + 1 == posDestino.fila) &&	
-				(posOrigen.columna == posDestino.columna))
+			if (posOrigen.fila == 1 &&
+				posDestino.fila == 3 &&
+				tablero[2][posOrigen.columna] == '*')
 			{
-				if (posDestino.fila == LADO-1)
-					gestionarPromocion(tablero, turnoBlancas, posDestino);
 				return true;
 			}
-			break;
-
-		default:
-			break;
+		}
+		else {
+			switch (destino)
+			{
+			case 'T': case 'H': case 'B': case 'Q': case 'K': case 'P':
+				if ((posOrigen.columna + 1 == posDestino.columna ||
+					posOrigen.columna - 1 == posDestino.columna) &&
+					posOrigen.fila + 1 == posDestino.fila)
+				{
+					if (posDestino.fila == LADO - 1)
+						gestionarPromocion(tablero, turnoBlancas, posDestino);
+					return true;
+				}
+				break;
+			}
 		}
 	}
 	return false;
@@ -510,135 +508,36 @@ bool movimientoAlfil(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOr
 	return false;
 }
 
-bool movimientoRey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrigen, Posicion& posDestino, bool enrocado[], bool puedeEnrocar[])
+bool movimientoRey(char tablero[LADO][LADO],
+	bool turnoBlancas,
+	Posicion posOrigen,
+	Posicion& posDestino,
+	bool enrocado[],
+	bool puedeEnrocar[])
 {
-	if (turnoBlancas)
-	{
-		switch (tablero[posDestino.fila][posDestino.columna])
-		{
-		case 'T':
-			if (!enrocado[0] && puedeEnrocar[0])
-			{
-				int dif_columnas = posDestino.columna - posOrigen.columna;
-				for (int offset = dif_columnas > 0 ? dif_columnas - 1 : dif_columnas + 1;
-					offset != 0; offset = offset > 0 ? offset - 1 : offset + 1)
-				{
-					if (tablero[posOrigen.fila][posOrigen.columna + offset] != '*')	
-						return false;
-				}
+	int colorIdx = turnoBlancas ? 0 : 1;
 
-				if (posDestino.columna < posOrigen.columna) 
-				{
-					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna - 2 };
-					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna + 1 };
-				
-					enrocado[0] = true;
-					puedeEnrocar[0] = false;
-					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
-					tablero[posDestino.fila][posDestino.columna] = '*';
-					posDestino.fila = reyEnrocado.fila;
-					posDestino.columna = reyEnrocado.columna;
-					return true;
-				}
-				else 
-				{
-					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna + 2 };
-					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna - 1 };
+	int df = posDestino.fila - posOrigen.fila;
+	int dc = posDestino.columna - posOrigen.columna;
 
-					enrocado[0] = true;
-					puedeEnrocar[0] = false;
-					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
-					tablero[posDestino.fila][posDestino.columna] = '*';
-					posDestino.fila = reyEnrocado.fila;
-					posDestino.columna = reyEnrocado.columna;
-					return true;
-				}
-			}
-			break;
-
-		case 't':
-		case 'h':
-		case 'b':
-		case 'q':
-		case 'k':
-		case 'p':
-		case '*':
-			puedeEnrocar[0] = false;			
-
-			return
-				((posOrigen.fila - 1 == posDestino.fila) &&			
-				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				
-				(posOrigen.columna + 1 == posDestino.columna)) ||
-				((posOrigen.fila + 1 == posDestino.fila) &&			
-				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				
-				(posOrigen.columna - 1 == posDestino.columna));
-			break;
-
-		default:
-			break;
+	//Se mueve hacia cualquier lado pero solo 1 casilla
+	if (std::abs(df) <= 1 && std::abs(dc) <= 1 && !(df == 0 && dc == 0)) {
+		char destino = tablero[posDestino.fila][posDestino.columna];
+		bool esVacia = (destino == '*');
+		bool esRival;
+		if (turnoBlancas) {
+			esRival = std::islower(destino);
+		}
+		else {
+			esRival = std::isupper(destino);
+		}
+		if (esVacia || esRival) {
+			//Si se mueve rey ya no hay enroque
+			puedeEnrocar[colorIdx] = false;
+			return true;
 		}
 	}
-	
-	else {
-		switch (tablero[posDestino.fila][posDestino.columna])
-		{
-		case 't':
-			if (!enrocado[1] && puedeEnrocar[1])
-			{
-				if (posDestino.columna < posOrigen.columna) 
-				{
-					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna - 2 };
-					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna + 1 };
 
-					enrocado[1] = true;
-					puedeEnrocar[1] = false;
-					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
-					tablero[posDestino.fila][posDestino.columna] = '*';
-					posDestino.fila = reyEnrocado.fila;
-					posDestino.columna = reyEnrocado.columna;
-					return true;
-				}
-				else 
-				{
-					Posicion reyEnrocado = { posOrigen.fila, posOrigen.columna + 2 };
-					Posicion torreEnrocada = { reyEnrocado.fila, reyEnrocado.columna - 1 };
-
-					enrocado[1] = true;
-					puedeEnrocar[1] = false;
-					gestionarEnroque(tablero, turnoBlancas, reyEnrocado, torreEnrocada);
-					tablero[posDestino.fila][posDestino.columna] = '*';
-					posDestino.fila = reyEnrocado.fila;
-					posDestino.columna = reyEnrocado.columna;
-					return true;
-				}
-			}
-			break;
-
-		case 'T':
-		case 'H':
-		case 'B':
-		case 'Q':
-		case 'K':
-		case 'P':
-			puedeEnrocar[1] = false;
-
-			return
-				((posOrigen.fila - 1 == posDestino.fila) &&			
-				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&				
-				(posOrigen.columna - 1 == posDestino.columna)) ||
-				((posOrigen.fila + 1 == posDestino.fila) &&			
-				(posOrigen.columna == posDestino.columna)) ||
-				((posOrigen.fila == posDestino.fila) &&			
-				(posOrigen.columna - 1 == posDestino.columna));
-			break;
-
-		default:
-			break;
-		}
-	}
 	return false;
 }
 
@@ -732,20 +631,46 @@ void sustituirCasilla(char tablero[LADO][LADO], Posicion posOrigen, Posicion pos
 
 bool juegoAcabado(char tablero[LADO][LADO])
 {
+	int totalBlancas = 0;
+	int totalNegras = 0;
+	Posicion posReyBlancas;
+	Posicion posReyNegras;
 	bool reyBlancas = false;
 	bool reyNegras = false;
 
-	for (int i = 0; i < LADO; i++)
-	{
-		for (int j = 0; j < LADO; j++)
-		{
-			if (tablero[i][j] == 'K')
+	for (int i = 0; i < LADO; i++) {
+		for (int j = 0; j < LADO; j++) {
+			char pieza = tablero[i][j];
+			if (pieza == 'K') {
 				reyBlancas = true;
-			else if(tablero[i][j] == 'k')
+				posReyBlancas = { i, j };
+			}
+			else if (pieza == 'k') {
 				reyNegras = true;
+				posReyNegras = { i, j };
+			}
+
+			if (isupper(pieza)) totalBlancas++;
+			if (islower(pieza)) totalNegras++;
 		}
 	}
-	return !(reyBlancas && reyNegras);
+
+	//Si algun rey falta se termina la partida
+	if (!reyBlancas || !reyNegras) return true;
+
+	//En caso de que este el rey solo, se termina partida (rey negro)
+	if (totalNegras == 1) {
+		cout << "Ganan blancas." << endl;
+		return true;
+	}
+
+	//En caso de que este el rey solo, se termina partida (rey blanco)
+	if (totalBlancas == 1) {
+		cout << "Ganan negras." << endl;
+		return true;
+	}
+
+	return false;
 }
 
 void mostrarTurno(bool turnoBlancas) {
