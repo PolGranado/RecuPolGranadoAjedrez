@@ -1,10 +1,7 @@
 #include "FuncionesAjedrez.h"
-#include <iostream>
-
+#include <iostream> 
 using namespace std;
-
-using namespace std; using namespace std; using namespace std; using namespace std; using namespace std;
-
+ 
 void imprimirMatriz(char tablero[LADO][LADO])
 {
 	//Aqui tenemos la cabecera de las columnas  con margenes
@@ -14,11 +11,10 @@ void imprimirMatriz(char tablero[LADO][LADO])
 	}
 	cout << endl;
 
-	// 2) Cada fila, numerada de LADO a 1
+	//Esto es que cada fila estara numerada 
 	for (int fila = 0; fila < LADO; ++fila) {
-		// número de fila (8,7,…,1)
 		cout << (LADO - fila) << ' ';
-		// contenido de la fila
+		//Tenemos el contenido de la fila
 		for (int col = 0; col < LADO; ++col) {
 			cout << tablero[fila][col] << ' ';
 		}
@@ -37,6 +33,7 @@ void elegirPieza(char tablero[LADO][LADO], bool turnoBlancas, Posicion* posPieza
 		{
 			system("cls");
 			imprimirMatriz(tablero);
+			mostrarTurno(turnoBlancas);
 			cout << endl << endl;
 			cout << "Elige una pieza (introduce su posicion)" << endl;
 			cout << " Introduce la fila: " << flush;
@@ -583,7 +580,7 @@ bool movimientoRey(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOrig
 			break;
 		}
 	}
-
+	
 	else {
 		switch (tablero[posDestino.fila][posDestino.columna])
 		{
@@ -749,4 +746,15 @@ bool juegoAcabado(char tablero[LADO][LADO])
 		}
 	}
 	return !(reyBlancas && reyNegras);
+}
+
+void mostrarTurno(bool turnoBlancas) {
+	cout << endl;
+	if (turnoBlancas) {
+		cout << "Turno de las BLANCAS (piezas en MAYUSCULA)" << endl;
+	}
+	else {
+		cout << "Turno de las NEGRAS (piezas en minuscula)" << endl;
+	}
+	cout << endl;
 }

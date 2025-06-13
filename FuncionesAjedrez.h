@@ -27,3 +27,4 @@ bool movimientoReina(char tablero[LADO][LADO], bool turnoBlancas, Posicion posOr
 
 void sustituirCasilla(char tablero[LADO][LADO], Posicion posOrigen, Posicion posDestino);
 bool juegoAcabado(char tablero[LADO][LADO]);
+void mostrarTurno(bool turnoBlancas);

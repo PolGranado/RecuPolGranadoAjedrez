@@ -1,5 +1,3 @@
-// Archivo: main.cpp
-
 #include "FuncionesAjedrez.h"
 #include <iostream>
 #include <Windows.h>
@@ -9,52 +7,53 @@
 using namespace std;
 
 int main() {
-
     // Inicializar el tablero de ajedrez
     char tablero[LADO][LADO] = {
-        't', 'h', 'b', 'q', 'k', 'b', 'h', 't',
-        'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
-        '*', '*', '*', '*', '*', '*', '*', '*',
-        '*', '*', '*', '*', '*', '*', '*', '*',
-        '*', '*', '*', '*', '*', '*', '*', '*',
-        '*', '*', '*', '*', '*', '*', '*', '*',
-        'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
-        'T', 'H', 'B', 'Q', 'K', 'B', 'H', 'T'
+        't','h','b','q','k','b','h','t',
+        'p','p','p','p','p','p','p','p',
+        '*','*','*','*','*','*','*','*',
+        '*','*','*','*','*','*','*','*',
+        '*','*','*','*','*','*','*','*',
+        '*','*','*','*','*','*','*','*',
+        'P','P','P','P','P','P','P','P',
+        'T','H','B','Q','K','B','H','T'
     };
-
-    imprimirMatriz(tablero);
 
     bool juegoTerminado = false;
     bool turnoBlancas = true;
-    bool enroquesRealizados[2] = { false, false }; // 0 -> blancas
-    bool puedeEnrocar[2] = { true, true }; // 0 -> blancas
+    bool enroquesRealizados[2] = { false, false };
+    bool puedeEnrocar[2] = { true,  true };
+
 
     while (!juegoTerminado) {
+        system("cls");
+        imprimirMatriz(tablero);
 
+
+        //Pedir el movimiento y ponerlo
         Posicion posicionPieza;
-
-         elegirPieza(tablero, turnoBlancas, &posicionPieza);
+        elegirPieza(tablero, turnoBlancas, &posicionPieza);
 
         Posicion posicionDestino;
-
         do {
             elegirMovimiento(tablero, turnoBlancas, &posicionDestino);
-
-        } while (!gestionarMovimientoValido(tablero, turnoBlancas, enroquesRealizados, puedeEnrocar, posicionPieza, posicionDestino));
+        } while (!gestionarMovimientoValido(
+            tablero, turnoBlancas,
+            enroquesRealizados, puedeEnrocar,
+            posicionPieza, posicionDestino
+        ));
 
         sustituirCasilla(tablero, posicionPieza, posicionDestino);
 
-        juegoTerminado = juegoTerminado || juegoAcabado(tablero);
-
+        //Verifica el final del juego
+        juegoTerminado = juegoAcabado(tablero);
+        //Cambia de turno
         turnoBlancas = !turnoBlancas;
-
-        system("cls");
-        imprimirMatriz(tablero);
 
         Sleep(DURACION_FRAME);
     }
 
-    cout << "\n\nJuego terminado!" << endl;
-
+    cout << endl;
+    cout << "¡Juego terminado!" << endl;
     return 0;
 }
