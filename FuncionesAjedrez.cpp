@@ -3,7 +3,7 @@
 
 using namespace std;
 
-TESTEO
+using namespace std; using namespace std; using namespace std; using namespace std; using namespace std;
 
 void imprimirMatriz(char tablero[LADO][LADO])
 {
